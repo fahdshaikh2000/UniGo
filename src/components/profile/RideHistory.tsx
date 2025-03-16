@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
+  MapPin,
   Calendar,
   Clock,
-  MapPin,
   Star,
   ThumbsUp,
   ThumbsDown,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 interface RideHistoryItemProps {
   id: string;
@@ -132,7 +131,7 @@ const RideHistory: React.FC<RideHistoryProps> = ({
         "https://api.dicebear.com/7.x/avataaars/svg?seed=ayesha",
       otherPartyRating: 4.7,
       price: 6.5,
-      status: "completed",
+      status: "completed" as const,
       asDriver: true,
     },
     {
@@ -145,7 +144,7 @@ const RideHistory: React.FC<RideHistoryProps> = ({
       otherPartyAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=bilal",
       otherPartyRating: 4.9,
       price: 8.0,
-      status: "completed",
+      status: "completed" as const,
       asDriver: true,
     },
     {
@@ -159,7 +158,7 @@ const RideHistory: React.FC<RideHistoryProps> = ({
         "https://api.dicebear.com/7.x/avataaars/svg?seed=fatima",
       otherPartyRating: 4.5,
       price: 4.0,
-      status: "cancelled",
+      status: "cancelled" as const,
       asDriver: true,
     },
   ],
@@ -174,7 +173,7 @@ const RideHistory: React.FC<RideHistoryProps> = ({
       otherPartyAvatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=usman",
       otherPartyRating: 4.8,
       price: 7.5,
-      status: "completed",
+      status: "completed" as const,
       asDriver: false,
     },
     {
@@ -188,7 +187,7 @@ const RideHistory: React.FC<RideHistoryProps> = ({
         "https://api.dicebear.com/7.x/avataaars/svg?seed=zainab",
       otherPartyRating: 4.6,
       price: 5.0,
-      status: "completed",
+      status: "completed" as const,
       asDriver: false,
     },
     {
@@ -202,7 +201,7 @@ const RideHistory: React.FC<RideHistoryProps> = ({
         "https://api.dicebear.com/7.x/avataaars/svg?seed=hassan",
       otherPartyRating: 4.3,
       price: 9.0,
-      status: "completed",
+      status: "completed" as const,
       asDriver: false,
     },
   ],

@@ -141,9 +141,9 @@ const RideSearchResults = ({
         comparison = a.price - b.price;
         break;
       case "time":
-        comparison =
-          new Date(`${a.date} ${a.time}`).getTime() -
-          new Date(`${b.date} ${b.time}`).getTime();
+        // Simple string comparison for demo purposes
+        // In a real app, you'd parse these into Date objects
+        comparison = a.time.localeCompare(b.time);
         break;
       case "seats":
         comparison = a.availableSeats - b.availableSeats;
@@ -180,7 +180,7 @@ const RideSearchResults = ({
             onClick={() => handleSortChange("price")}
           >
             <DollarSign size={16} className="mr-1" />
-            Price (PKR)
+            Price
             {localSortBy === "price" &&
               (sortDirection === "asc" ? (
                 <SortAsc size={16} className="ml-1" />

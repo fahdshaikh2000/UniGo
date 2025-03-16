@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MapPin, AlertTriangle, Navigation, Phone, Shield } from "lucide-react";
+import GoogleMapView from "./GoogleMapView";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -84,120 +85,12 @@ const RideTracking = ({
       <CardContent className="p-6">
         {/* Map Visualization */}
         <div className="relative w-full h-64 bg-gray-100 rounded-lg mb-6 overflow-hidden">
-          {/* Azure Maps with live tracking */}
-          <div id="tracking-map" className="absolute inset-0"></div>
-
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-            // Initialize Azure Maps for tracking
-            setTimeout(() => {
-              const mapElement = document.getElementById('tracking-map');
-              if (mapElement && window.atlas) {
-                const map = new atlas.Map('tracking-map', {
-                  authOptions: {
-                    authType: 'subscriptionKey',
-                    subscriptionKey: '800n0pLHpRxwcY5vOToH3hFatFbYZBULLYfHnZjY78InWtZeKGzrJQQJ99BCACYeBjF2kqJFAAAgAZMPjzno'
-                  },
-                  center: [74.3587, 31.5204], // Lahore coordinates
-                  zoom: 13
-                });
-                
-                map.events.add('ready', function() {
-                  // Create a data source and add it to the map
-                  const datasource = new atlas.source.DataSource();
-                  map.sources.add(datasource);
-                  
-                  // Add origin and destination points
-                  const originPoint = new atlas.data.Feature(
-                    new atlas.data.Point([74.3587, 31.5204]), // Placeholder coordinates
-                    { name: "${origin}" }
-                  );
-                  
-                  const destinationPoint = new atlas.data.Feature(
-                    new atlas.data.Point([74.3686, 31.5804]), // Placeholder coordinates
-                    { name: "${destination}" }
-                  );
-                  
-                  // Add vehicle position point
-                  const vehiclePoint = new atlas.data.Feature(
-                    new atlas.data.Point([74.3636, 31.5504]), // Placeholder coordinates
-                    { name: "Current Location" }
-                  );
-                  
-                  datasource.add([originPoint, destinationPoint, vehiclePoint]);
-                  
-                  // Create a line layer to render the route line
-                  map.layers.add(new atlas.layer.LineLayer(datasource, null, {
-                    strokeColor: '#2272B9',
-                    strokeWidth: 5,
-                    filter: ['==', ['geometry-type'], 'LineString']
-                  }));
-                  
-                  // Create a symbol layer for origin and destination
-                  map.layers.add(new atlas.layer.SymbolLayer(datasource, 'pins', {
-                    iconOptions: {
-                      image: 'pin-round-darkblue',
-                      anchor: 'center',
-                      allowOverlap: true
-                    },
-                    filter: ['any', 
-                      ['==', ['get', 'name'], "${origin}"],
-                      ['==', ['get', 'name'], "${destination}"]
-                    ]
-                  }));
-                  
-                  // Create a symbol layer for the vehicle
-                  map.layers.add(new atlas.layer.SymbolLayer(datasource, 'vehicle', {
-                    iconOptions: {
-                      image: 'car',
-                      anchor: 'center',
-                      allowOverlap: true,
-                      size: 0.8
-                    },
-                    filter: ['==', ['get', 'name'], 'Current Location']
-                  }));
-                  
-                  // Simulate a route line
-                  const routeLine = new atlas.data.LineString([
-                    [74.3587, 31.5204], // Origin
-                    [74.3636, 31.5504], // Current vehicle position
-                    [74.3686, 31.5804]  // Destination
-                  ]);
-                  
-                  datasource.add(new atlas.data.Feature(routeLine));
-                  
-                  // Animate the vehicle position
-                  let progress = ${currentProgress} / 100;
-                  const animateVehicle = () => {
-                    if (progress <= 1) {
-                      // Interpolate position along the route
-                      const position = [
-                        74.3587 + (74.3686 - 74.3587) * progress,
-                        31.5204 + (31.5804 - 31.5204) * progress
-                      ];
-                      
-                      // Update vehicle position
-                      datasource.clear();
-                      datasource.add([originPoint, destinationPoint]);
-                      datasource.add(new atlas.data.Feature(
-                        new atlas.data.Point(position),
-                        { name: 'Current Location' }
-                      ));
-                      datasource.add(new atlas.data.Feature(routeLine));
-                      
-                      progress += 0.005;
-                      setTimeout(animateVehicle, 500);
-                    }
-                  };
-                  
-                  // Start animation
-                  animateVehicle();
-                });
-              }
-            }, 500);
-          `,
-            }}
+          {/* Google Maps with live tracking */}
+          <GoogleMapView
+            origin={origin}
+            destination={destination}
+            showRoute={true}
+            className="absolute inset-0"
           />
 
           {/* Vehicle marker overlay */}

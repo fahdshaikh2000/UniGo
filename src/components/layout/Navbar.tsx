@@ -55,6 +55,14 @@ const Navbar = ({
     }
   };
 
+  const handleSettingsClick = () => {
+    navigate("/profile");
+  };
+
+  const handleNotificationClick = () => {
+    navigate("/dashboard");
+  };
+
   const onLogoutClick = () => {
     logout();
     navigate("/");
@@ -110,7 +118,7 @@ const Navbar = ({
                   variant="ghost"
                   size="icon"
                   className="relative mr-2"
-                  onClick={onNotificationsClick}
+                  onClick={handleNotificationClick}
                 >
                   <Bell size={20} />
                   {notificationCount > 0 && (
@@ -121,6 +129,14 @@ const Navbar = ({
                       {notificationCount}
                     </Badge>
                   )}
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleSettingsClick}
+                >
+                  <Settings size={20} />
                 </Button>
 
                 <DropdownMenu>
@@ -270,7 +286,7 @@ const Navbar = ({
                   variant="ghost"
                   size="icon"
                   className="ml-auto relative"
-                  onClick={onNotificationsClick}
+                  onClick={handleNotificationClick}
                 >
                   <Bell size={20} />
                   {notificationCount > 0 && (

@@ -111,28 +111,28 @@ const ProfileHeader = ({
 
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 border-t pt-4">
-          <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg">
+          <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg">
             <span className="text-2xl font-bold text-primary">
               {ridesCompleted}
             </span>
             <span className="text-sm text-gray-600">Total Rides</span>
           </div>
 
-          <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg">
+          <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg">
             <span className="text-2xl font-bold text-primary">
               {ridesAsDriver}
             </span>
             <span className="text-sm text-gray-600">As Driver</span>
           </div>
 
-          <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg">
+          <div className="flex flex-col items-center justify-center p-3 bg-gray-50 rounded-lg">
             <span className="text-2xl font-bold text-primary">
               {ridesAsPassenger}
             </span>
             <span className="text-sm text-gray-600">As Passenger</span>
           </div>
 
-          <div className="flex flex-col items-center p-3 bg-green-50 rounded-lg">
+          <div className="flex flex-col items-center justify-center p-3 bg-green-50 rounded-lg">
             <div className="flex items-center">
               <Award className="h-5 w-5 text-green-600 mr-1" />
               <span className="text-2xl font-bold text-green-600">

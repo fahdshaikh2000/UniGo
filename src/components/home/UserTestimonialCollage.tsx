@@ -10,28 +10,28 @@ const UserTestimonialCollage = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="relative overflow-hidden rounded-lg shadow-md aspect-[4/3]">
             <img
-              src="/images/carpooling-1.jpg"
+              src="https://i.imgur.com/l9neRpD.jpg"
               alt="University students carpooling"
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md aspect-[4/3]">
             <img
-              src="/images/carpooling-2.jpg"
+              src="https://i.imgur.com/sT71Cyg.jpg"
               alt="University students carpooling"
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md aspect-[4/3]">
             <img
-              src="/images/carpooling-3.jpg"
+              src="https://i.imgur.com/3E1iRmZ.jpg"
               alt="University students carpooling"
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />
           </div>
           <div className="relative overflow-hidden rounded-lg shadow-md aspect-[4/3]">
             <img
-              src="/images/carpooling-4.jpg"
+              src="https://i.imgur.com/dgtTDLv.jpg"
               alt="University students carpooling"
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
             />

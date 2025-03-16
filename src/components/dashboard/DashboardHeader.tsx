@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Bell, Car, Calendar, MapPin, Settings } from "lucide-react";
+import { Bell, Car, Calendar, MapPin, Settings, Map } from "lucide-react";
 
 interface DashboardHeaderProps {
   userName?: string;
@@ -69,6 +69,12 @@ const DashboardHeader = ({
               </Button>
               <Button variant="outline" onClick={onFindRide}>
                 <MapPin className="mr-2 h-4 w-4" /> Find a Ride
+              </Button>
+              <Button
+                variant="ghost"
+                onClick={() => (window.location.href = "/feature-roadmap")}
+              >
+                <Map className="mr-2 h-4 w-4" /> Roadmap
               </Button>
             </div>
           </div>

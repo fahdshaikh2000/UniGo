@@ -10,6 +10,7 @@ import {
   MessageCircle,
   Phone,
 } from "lucide-react";
+import GoogleMapView from "./GoogleMapView";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -287,72 +288,11 @@ const RideInfo = ({
 
             {/* Azure Maps Route View */}
             <div className="mt-4 h-48 w-full">
-              <div id="info-map" className="w-full h-full rounded-md"></div>
-
-              <script
-                dangerouslySetInnerHTML={{
-                  __html: `
-                // Initialize Azure Maps for ride info
-                setTimeout(() => {
-                  const mapElement = document.getElementById('info-map');
-                  if (mapElement && window.atlas) {
-                    const map = new atlas.Map('info-map', {
-                      authOptions: {
-                        authType: 'subscriptionKey',
-                        subscriptionKey: '800n0pLHpRxwcY5vOToH3hFatFbYZBULLYfHnZjY78InWtZeKGzrJQQJ99BCACYeBjF2kqJFAAAgAZMPjzno'
-                      },
-                      center: [74.3587, 31.5204], // Lahore coordinates
-                      zoom: 12
-                    });
-                    
-                    map.events.add('ready', function() {
-                      // Create a data source and add it to the map
-                      const datasource = new atlas.source.DataSource();
-                      map.sources.add(datasource);
-                      
-                      // Add origin and destination points
-                      const originPoint = new atlas.data.Feature(
-                        new atlas.data.Point([74.3587, 31.5204]), // Placeholder coordinates
-                        { name: "${origin}" }
-                      );
-                      
-                      const destinationPoint = new atlas.data.Feature(
-                        new atlas.data.Point([74.3686, 31.5804]), // Placeholder coordinates
-                        { name: "${destination}" }
-                      );
-                      
-                      datasource.add([originPoint, destinationPoint]);
-                      
-                      // Create a line layer to render the route line
-                      map.layers.add(new atlas.layer.LineLayer(datasource, null, {
-                        strokeColor: '#2272B9',
-                        strokeWidth: 5,
-                        filter: ['==', ['geometry-type'], 'LineString']
-                      }));
-                      
-                      // Create a symbol layer to render the origin and destination points
-                      map.layers.add(new atlas.layer.SymbolLayer(datasource, null, {
-                        iconOptions: {
-                          image: 'pin-round-darkblue',
-                          anchor: 'center',
-                          allowOverlap: true
-                        },
-                        filter: ['==', ['geometry-type'], 'Point']
-                      }));
-                      
-                      // Simulate a route line for demo purposes
-                      const routeLine = new atlas.data.LineString([
-                        [74.3587, 31.5204], // Origin
-                        [74.3636, 31.5504], // Waypoint
-                        [74.3686, 31.5804]  // Destination
-                      ]);
-                      
-                      datasource.add(new atlas.data.Feature(routeLine));
-                    });
-                  }
-                }, 500);
-              `,
-                }}
+              <GoogleMapView
+                origin={origin}
+                destination={destination}
+                showRoute={true}
+                className="w-full h-full rounded-md"
               />
             </div>
           </div>

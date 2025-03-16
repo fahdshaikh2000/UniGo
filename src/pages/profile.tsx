@@ -2,6 +2,8 @@ import React from "react";
 import ProfileHeader from "../components/profile/ProfileHeader";
 import RideHistory from "../components/profile/RideHistory";
 import EcoAchievements from "../components/profile/EcoAchievements";
+import VehicleManager from "../components/profile/VehicleManager";
+import VerificationUploader from "../components/profile/VerificationUploader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { User, Car, Award, Settings, Bell } from "lucide-react";
@@ -192,10 +194,14 @@ const ProfilePage = ({ userId = "user-123" }: ProfilePageProps) => {
         {/* Profile content tabs */}
         <div className="mt-8">
           <Tabs defaultValue="rides" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsList className="grid w-full grid-cols-4 mb-8">
               <TabsTrigger value="rides" className="flex items-center gap-2">
                 <Car size={16} />
                 Ride History
+              </TabsTrigger>
+              <TabsTrigger value="vehicles" className="flex items-center gap-2">
+                <Car size={16} />
+                My Vehicles
               </TabsTrigger>
               <TabsTrigger value="eco" className="flex items-center gap-2">
                 <Award size={16} />
@@ -214,6 +220,12 @@ const ProfilePage = ({ userId = "user-123" }: ProfilePageProps) => {
               />
             </TabsContent>
 
+            <TabsContent value="vehicles">
+              <div className="space-y-6">
+                <VehicleManager />
+              </div>
+            </TabsContent>
+
             <TabsContent value="eco">
               <EcoAchievements
                 achievements={achievements}
@@ -224,15 +236,19 @@ const ProfilePage = ({ userId = "user-123" }: ProfilePageProps) => {
             </TabsContent>
 
             <TabsContent value="settings">
-              <Card className="w-full bg-white p-6 rounded-lg shadow-sm">
-                <h2 className="text-2xl font-semibold mb-6">
-                  Account Settings
-                </h2>
-                <p className="text-gray-500 text-center py-8">
-                  Account settings functionality will be implemented in a future
-                  update.
-                </p>
-              </Card>
+              <div className="space-y-6">
+                <Card className="w-full bg-white p-6 rounded-lg shadow-sm">
+                  <h2 className="text-2xl font-semibold mb-6">
+                    Account Settings
+                  </h2>
+                  <p className="text-gray-500 text-center py-8">
+                    Account settings functionality will be implemented in a
+                    future update.
+                  </p>
+                </Card>
+
+                <VerificationUploader status="unverified" />
+              </div>
             </TabsContent>
           </Tabs>
         </div>

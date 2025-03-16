@@ -1,107 +1,137 @@
 import React, { useEffect, useRef } from "react";
+import { loadGoogleMapsScript } from "@/lib/googleMaps";
 
-interface AzureMapViewProps {
+interface GoogleMapViewProps {
   origin: string;
   destination: string;
   showRoute?: boolean;
   className?: string;
 }
 
-const AzureMapView: React.FC<AzureMapViewProps> = ({
+const GoogleMapView: React.FC<GoogleMapViewProps> = ({
   origin,
   destination,
   showRoute = true,
   className = "w-full h-80",
 }) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const directionsRendererRef = useRef<any>(null);
 
   useEffect(() => {
-    if (!mapRef.current) return;
-
-    // Initialize Azure Maps
-    const map = new (window as any).atlas.Map(mapRef.current, {
-      authOptions: {
-        authType: "subscriptionKey",
-        subscriptionKey:
-          "800n0pLHpRxwcY5vOToH3hFatFbYZBULLYfHnZjY78InWtZeKGzrJQQJ99BCACYeBjF2kqJFAAAgAZMPjzno",
-      },
-      center: [74.3587, 31.5204], // Lahore coordinates
-      zoom: 12,
-    });
-
-    map.events.add("ready", function () {
-      // Create a data source and add it to the map
-      const datasource = new (window as any).atlas.source.DataSource();
-      map.sources.add(datasource);
-
-      // Add origin and destination points
-      const originPoint = new (window as any).atlas.data.Feature(
-        new (window as any).atlas.data.Point([74.3587, 31.5204]), // Placeholder coordinates
-        { name: origin },
-      );
-
-      const destinationPoint = new (window as any).atlas.data.Feature(
-        new (window as any).atlas.data.Point([74.3686, 31.5804]), // Placeholder coordinates
-        { name: destination },
-      );
-
-      datasource.add([originPoint, destinationPoint]);
-
-      // Create a line layer to render the route line
-      map.layers.add(
-        new (window as any).atlas.layer.LineLayer(datasource, null, {
-          strokeColor: "#2272B9",
-          strokeWidth: 5,
-          filter: ["==", ["geometry-type"], "LineString"],
-        }),
-      );
-
-      // Create a symbol layer to render the origin and destination points
-      map.layers.add(
-        new (window as any).atlas.layer.SymbolLayer(datasource, null, {
-          iconOptions: {
-            image: "pin-round-darkblue",
-            anchor: "center",
-            allowOverlap: true,
-          },
-          textOptions: {
-            anchor: "top",
-            offset: [0, 1],
-            color: "#000",
-            size: 12,
-            font: ["StandardFont-Bold"],
-            halo: {
-              color: "#fff",
-              width: 2,
-            },
-          },
-          filter: ["==", ["geometry-type"], "Point"],
-        }),
-      );
-
-      // If showRoute is true, calculate and display the route
-      if (showRoute) {
-        // Create a route URL using Azure Maps Route API
-        // This is a simplified example - in a real app, you would use geocoding to get coordinates
-        const routeURL = `https://atlas.microsoft.com/route/directions/json?subscription-key=800n0pLHpRxwcY5vOToH3hFatFbYZBULLYfHnZjY78InWtZeKGzrJQQJ99BCACYeBjF2kqJFAAAgAZMPjzno&api-version=1.0&query=31.5204,74.3587:31.5804,74.3686`;
-
-        // Simulate a route line for demo purposes
-        const routeLine = new (window as any).atlas.data.LineString([
-          [74.3587, 31.5204], // Origin
-          [74.3636, 31.5504], // Waypoint
-          [74.3686, 31.5804], // Destination
-        ]);
-
-        datasource.add(new (window as any).atlas.data.Feature(routeLine));
-      }
+    // Load Google Maps API
+    loadGoogleMapsScript(() => {
+      initMap();
     });
 
     return () => {
-      // Clean up map resources when component unmounts
-      if (map) {
-        map.dispose();
+      // Clean up resources when component unmounts
+      if (mapInstanceRef.current) {
+        // Google Maps doesn't have a built-in dispose method
+        mapInstanceRef.current = null;
       }
     };
+  }, []);
+
+  // Initialize the map
+  const initMap = () => {
+    if (!mapRef.current || !window.google) return;
+
+    // Create a new map instance
+    mapInstanceRef.current = new window.google.maps.Map(mapRef.current, {
+      center: { lat: 31.5204, lng: 74.3587 }, // Lahore coordinates
+      zoom: 12,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: false,
+    });
+
+    // Initialize the directions renderer
+    directionsRendererRef.current = new window.google.maps.DirectionsRenderer({
+      map: mapInstanceRef.current,
+      suppressMarkers: false,
+    });
+
+    // If we have origin and destination, calculate the route
+    if (origin && destination && showRoute) {
+      calculateRoute();
+    }
+  };
+
+  // Calculate and display the route
+  const calculateRoute = () => {
+    if (!window.google || !mapInstanceRef.current) return;
+
+    const directionsService = new window.google.maps.DirectionsService();
+
+    directionsService.route(
+      {
+        origin,
+        destination,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (response, status) => {
+        if (status === "OK" && response) {
+          directionsRendererRef.current.setDirections(response);
+
+          // Fit the map to the route bounds
+          if (response.routes[0] && response.routes[0].bounds) {
+            mapInstanceRef.current.fitBounds(response.routes[0].bounds);
+          }
+        } else {
+          console.error(`Directions request failed due to ${status}`);
+
+          // If route calculation fails, just show markers for origin and destination
+          showMarkers();
+        }
+      },
+    );
+  };
+
+  // Show markers for origin and destination without a route
+  const showMarkers = () => {
+    if (!window.google || !mapInstanceRef.current) return;
+
+    // Geocode the origin and destination to get coordinates
+    const geocoder = new window.google.maps.Geocoder();
+
+    // Origin marker
+    geocoder.geocode({ address: origin }, (results, status) => {
+      if (status === "OK" && results && results[0]) {
+        new window.google.maps.Marker({
+          position: results[0].geometry.location,
+          map: mapInstanceRef.current,
+          title: origin,
+          label: "A",
+        });
+
+        // Center on first result
+        mapInstanceRef.current.setCenter(results[0].geometry.location);
+      }
+    });
+
+    // Destination marker
+    geocoder.geocode({ address: destination }, (results, status) => {
+      if (status === "OK" && results && results[0]) {
+        new window.google.maps.Marker({
+          position: results[0].geometry.location,
+          map: mapInstanceRef.current,
+          title: destination,
+          label: "B",
+        });
+      }
+    });
+  };
+
+  // Recalculate route when origin or destination changes
+  useEffect(() => {
+    if (window.google && mapInstanceRef.current && origin && destination) {
+      if (showRoute) {
+        calculateRoute();
+      } else {
+        showMarkers();
+      }
+    }
   }, [origin, destination, showRoute]);
 
   return (
@@ -112,4 +142,4 @@ const AzureMapView: React.FC<AzureMapViewProps> = ({
   );
 };
 
-export default AzureMapView;
+export default GoogleMapView;

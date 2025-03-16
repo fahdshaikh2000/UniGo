@@ -6,6 +6,7 @@ import FindRide from "./pages/find-ride";
 import CreateRide from "./pages/create-ride";
 import Profile from "./pages/profile";
 import RideDetails from "./pages/ride-details/[id]";
+import FeatureRoadmap from "./pages/feature-roadmap";
 import ProtectedRoute from "./components/ProtectedRoute";
 import routes from "tempo-routes";
 
@@ -13,7 +14,13 @@ const ChatPage = lazy(() => import("./pages/ride-details/ChatPage"));
 
 function App() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
@@ -45,6 +52,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/feature-roadmap"
+          element={
+            <ProtectedRoute>
+              <FeatureRoadmap />
             </ProtectedRoute>
           }
         />

@@ -1,0 +1,16 @@
+import React from 'react';
+import MapSelector from '@/components/rides/MapSelector';
+
+export default function MapSelectorStoryboard() {
+  return (
+    <div className="p-6 bg-gray-100">
+      <MapSelector 
+        initialPickup="LUMS Campus"
+        initialDropoff="Gulberg"
+        onLocationSelect={(origin, destination) => {
+          console.log('Selected locations:', { origin, destination });
+        }}
+      />
+    </div>
+  );
+}

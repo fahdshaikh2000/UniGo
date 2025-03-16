@@ -4,6 +4,7 @@ import RideCards from "@/components/dashboard/RideCards";
 import QuickActions from "@/components/dashboard/QuickActions";
 import EcoBadges from "@/components/dashboard/EcoBadges";
 import UserPhotoGallery from "@/components/dashboard/UserPhotoGallery";
+import SavingsHighlight from "@/components/dashboard/SavingsHighlight";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -28,6 +29,13 @@ const Dashboard = () => {
           userName="Fahd Niaz Shaikh"
           onCreateRide={handleCreateRide}
           onFindRide={handleFindRide}
+        />
+
+        <SavingsHighlight
+          totalKmTravelled={1250}
+          totalRides={24}
+          fuelEfficiency={12}
+          fuelPrice={280}
         />
 
         <QuickActions

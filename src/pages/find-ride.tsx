@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, MapPin, Clock, DollarSign, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import RideSearchFilters from "@/components/rides/RideSearchFilters";
 import RideSearchResults from "@/components/rides/RideSearchResults";
+import MapSelector from "@/components/rides/MapSelector";
 
 interface FilterState {
   origin: string;
@@ -173,7 +175,7 @@ const FindRidePage = () => {
             </div>
 
             <Card className="bg-blue-50 border-blue-200 w-full md:w-auto">
-              <CardContent className="p-4 flex flex-col sm:flex-row gap-4 items-center">
+              <div className="p-4 flex flex-col sm:flex-row gap-4 items-center">
                 <div className="flex items-center gap-2">
                   <div className="bg-blue-100 p-2 rounded-full">
                     <MapPin className="h-5 w-5 text-blue-600" />
@@ -197,7 +199,7 @@ const FindRidePage = () => {
                 <Button size="sm" className="whitespace-nowrap">
                   Quick Match
                 </Button>
-              </CardContent>
+              </div>
             </Card>
           </div>
         </div>
@@ -213,34 +215,32 @@ const FindRidePage = () => {
 
             {/* Quick Stats */}
             <Card className="mt-6 bg-white">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Quick Stats
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Users className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm">Active Drivers</span>
+              <div className="p-4">
+                <h3 className="text-sm font-medium mb-2">Quick Stats</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <Users className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-sm">Active Drivers</span>
+                    </div>
+                    <span className="font-medium">42</span>
                   </div>
-                  <span className="font-medium">42</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <Clock className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm">Avg. Response Time</span>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <Clock className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-sm">Avg. Response Time</span>
+                    </div>
+                    <span className="font-medium">5 min</span>
                   </div>
-                  <span className="font-medium">5 min</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                    <span className="text-sm">Avg. Price</span>
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
+                      <span className="text-sm">Avg. Price</span>
+                    </div>
+                    <span className="font-medium">PKR 650</span>
                   </div>
-                  <span className="font-medium">PKR 650</span>
                 </div>
-              </CardContent>
+              </div>
             </Card>
           </div>
 

@@ -67,7 +67,7 @@ const Hero = ({
         <div className="flex-1 relative">
           <div className="relative z-10 rounded-lg overflow-hidden shadow-xl">
             <img
-              src="/images/carpooling-1.jpg"
+              src="https://i.imgur.com/l9neRpD.jpg"
               alt="Pakistani university students carpooling"
               className="w-full h-auto rounded-lg"
             />
