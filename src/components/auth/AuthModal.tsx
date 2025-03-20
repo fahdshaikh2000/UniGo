@@ -12,6 +12,7 @@ import RegisterForm from "./RegisterForm";
 interface AuthModalProps {
   isOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  onClose?: () => void;
   defaultTab?: "login" | "register";
   onLoginSuccess?: () => void;
   onRegisterSuccess?: () => void;
@@ -20,6 +21,7 @@ interface AuthModalProps {
 const AuthModal = ({
   isOpen = true,
   onOpenChange = () => {},
+  onClose,
   defaultTab = "login",
   onLoginSuccess = () => {},
   onRegisterSuccess = () => {},
@@ -52,8 +54,16 @@ const AuthModal = ({
     setActiveTab("login");
   };
 
+  // Use onClose if provided, otherwise use onOpenChange
+  const handleOpenChange = (open: boolean) => {
+    onOpenChange(open);
+    if (!open && onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-md md:max-w-lg lg:max-w-xl bg-white p-0 overflow-hidden">
         <DialogHeader className="pt-6 px-6">
           <DialogTitle className="text-2xl font-bold text-center">

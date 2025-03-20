@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./layout/Navbar";
 import Hero from "./home/Hero";
 import FeatureHighlights from "./home/FeatureHighlights";
+import WaitlistCTA from "./home/WaitlistCTA";
 import AuthModal from "./auth/AuthModal";
 
 interface FooterProps {}
@@ -209,6 +210,12 @@ const Home: React.FC<HomeProps> = () => {
         />
         {/* Feature Highlights */}
         <FeatureHighlights />
+        {/* Waitlist CTA */}
+        <section className="py-8">
+          <div className="container mx-auto px-4">
+            <WaitlistCTA totalSignups={1250} />
+          </div>
+        </section>
         {/* User Photo Collage */}
         <section className="py-12 bg-gray-50">
           <div className="container mx-auto px-4">

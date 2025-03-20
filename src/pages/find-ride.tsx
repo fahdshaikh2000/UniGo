@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import RideSearchFilters from "@/components/rides/RideSearchFilters";
 import RideSearchResults from "@/components/rides/RideSearchResults";
 import MapSelector from "@/components/rides/MapSelector";
+import { Navbar, Footer } from "@/components/layout";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 interface FilterState {
   origin: string;
@@ -34,7 +36,7 @@ interface Ride {
   carModel: string;
 }
 
-const FindRidePage = () => {
+export default function FindRidePage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("time");
@@ -152,114 +154,118 @@ const FindRidePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="container mx-auto py-6 px-4 sm:px-6">
-        {/* Header */}
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            className="mb-4"
-            onClick={handleBackToDashboard}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
-          </Button>
+    <ProtectedRoute>
+      <div className="min-h-screen bg-gray-100">
+        <Navbar />
+        <div className="container mx-auto py-6 px-4 sm:px-6 mt-16">
+          {/* Header */}
+          <div className="mb-6">
+            <Button
+              variant="ghost"
+              className="mb-4"
+              onClick={handleBackToDashboard}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Button>
 
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Find a Ride</h1>
-              <p className="text-gray-600 mt-1">
-                Dastiyaab rides talash karein aur apni manzil ki taraf jaaney
-                wale drivers se rabta karein
-              </p>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Find a Ride
+                </h1>
+                <p className="text-gray-600 mt-1">
+                  Dastiyaab rides talash karein aur apni manzil ki taraf jaaney
+                  wale drivers se rabta karein
+                </p>
+              </div>
+
+              <Card className="bg-blue-50 border-blue-200 w-full md:w-auto">
+                <div className="p-4 flex flex-col sm:flex-row gap-4 items-center">
+                  <div className="flex items-center gap-2">
+                    <div className="bg-blue-100 p-2 rounded-full">
+                      <MapPin className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Mashoor Route</p>
+                      <p className="text-xs text-gray-600">LUMS → Gulberg</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <div className="bg-blue-100 p-2 rounded-full">
+                      <Clock className="h-5 w-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">Peak Hours</p>
+                      <p className="text-xs text-gray-600">8-9 AM, 4-6 PM</p>
+                    </div>
+                  </div>
+
+                  <Button size="sm" className="whitespace-nowrap">
+                    Quick Match
+                  </Button>
+                </div>
+              </Card>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Filters Sidebar */}
+            <div className="lg:col-span-1">
+              <RideSearchFilters
+                onFilterChange={handleFilterChange}
+                className="sticky top-6"
+              />
+
+              {/* Quick Stats */}
+              <Card className="mt-6 bg-white">
+                <div className="p-4">
+                  <h3 className="text-sm font-medium mb-2">Quick Stats</h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <Users className="h-4 w-4 text-gray-500 mr-2" />
+                        <span className="text-sm">Active Drivers</span>
+                      </div>
+                      <span className="font-medium">42</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <Clock className="h-4 w-4 text-gray-500 mr-2" />
+                        <span className="text-sm">Avg. Response Time</span>
+                      </div>
+                      <span className="font-medium">5 min</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center">
+                        <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
+                        <span className="text-sm">Avg. Price</span>
+                      </div>
+                      <span className="font-medium">PKR 650</span>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </div>
 
-            <Card className="bg-blue-50 border-blue-200 w-full md:w-auto">
-              <div className="p-4 flex flex-col sm:flex-row gap-4 items-center">
-                <div className="flex items-center gap-2">
-                  <div className="bg-blue-100 p-2 rounded-full">
-                    <MapPin className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Mashoor Route</p>
-                    <p className="text-xs text-gray-600">LUMS → Gulberg</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="bg-blue-100 p-2 rounded-full">
-                    <Clock className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Peak Hours</p>
-                    <p className="text-xs text-gray-600">8-9 AM, 4-6 PM</p>
-                  </div>
-                </div>
-
-                <Button size="sm" className="whitespace-nowrap">
-                  Quick Match
-                </Button>
-              </div>
-            </Card>
+            {/* Search Results */}
+            <div className="lg:col-span-3">
+              <RideSearchResults
+                rides={rides}
+                isLoading={isLoading}
+                onRequestRide={handleRequestRide}
+                searchQuery={searchQuery}
+                onSearchChange={handleSearchChange}
+                sortBy={sortBy}
+                onSortChange={handleSortChange}
+              />
+            </div>
           </div>
         </div>
-
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Filters Sidebar */}
-          <div className="lg:col-span-1">
-            <RideSearchFilters
-              onFilterChange={handleFilterChange}
-              className="sticky top-6"
-            />
-
-            {/* Quick Stats */}
-            <Card className="mt-6 bg-white">
-              <div className="p-4">
-                <h3 className="text-sm font-medium mb-2">Quick Stats</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <Users className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm">Active Drivers</span>
-                    </div>
-                    <span className="font-medium">42</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <Clock className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm">Avg. Response Time</span>
-                    </div>
-                    <span className="font-medium">5 min</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center">
-                      <DollarSign className="h-4 w-4 text-gray-500 mr-2" />
-                      <span className="text-sm">Avg. Price</span>
-                    </div>
-                    <span className="font-medium">PKR 650</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </div>
-
-          {/* Search Results */}
-          <div className="lg:col-span-3">
-            <RideSearchResults
-              rides={rides}
-              isLoading={isLoading}
-              onRequestRide={handleRequestRide}
-              searchQuery={searchQuery}
-              onSearchChange={handleSearchChange}
-              sortBy={sortBy}
-              onSortChange={handleSortChange}
-            />
-          </div>
-        </div>
+        <Footer />
       </div>
-    </div>
+    </ProtectedRoute>
   );
-};
-
-export default FindRidePage;
+}

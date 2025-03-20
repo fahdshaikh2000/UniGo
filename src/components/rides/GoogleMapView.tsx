@@ -70,7 +70,7 @@ const GoogleMapView: React.FC<GoogleMapViewProps> = ({
         destination,
         travelMode: window.google.maps.TravelMode.DRIVING,
       },
-      (response, status) => {
+      (response: any, status: string) => {
         if (status === "OK" && response) {
           directionsRendererRef.current.setDirections(response);
 
@@ -96,7 +96,7 @@ const GoogleMapView: React.FC<GoogleMapViewProps> = ({
     const geocoder = new window.google.maps.Geocoder();
 
     // Origin marker
-    geocoder.geocode({ address: origin }, (results, status) => {
+    geocoder.geocode({ address: origin }, (results: any, status: string) => {
       if (status === "OK" && results && results[0]) {
         new window.google.maps.Marker({
           position: results[0].geometry.location,
@@ -111,16 +111,19 @@ const GoogleMapView: React.FC<GoogleMapViewProps> = ({
     });
 
     // Destination marker
-    geocoder.geocode({ address: destination }, (results, status) => {
-      if (status === "OK" && results && results[0]) {
-        new window.google.maps.Marker({
-          position: results[0].geometry.location,
-          map: mapInstanceRef.current,
-          title: destination,
-          label: "B",
-        });
-      }
-    });
+    geocoder.geocode(
+      { address: destination },
+      (results: any, status: string) => {
+        if (status === "OK" && results && results[0]) {
+          new window.google.maps.Marker({
+            position: results[0].geometry.location,
+            map: mapInstanceRef.current,
+            title: destination,
+            label: "B",
+          });
+        }
+      },
+    );
   };
 
   // Recalculate route when origin or destination changes

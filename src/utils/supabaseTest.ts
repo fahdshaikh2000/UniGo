@@ -6,70 +6,69 @@ import { supabase } from "@/lib/supabase";
  */
 export const testSupabaseConnection = async () => {
   try {
-    // First check if we can connect at all
-    const { data: connectionTest, error: connectionError } = await supabase
-      .from("pg_stat_statements")
-      .select("query")
-      .limit(1);
-
-    if (connectionError && connectionError.code === "42501") {
-      // This is actually good - it means we connected but don't have permission for this specific table
-      // which is expected for the anon key
-
-      // Try to get the Supabase version which should be accessible
-      const { data, error } = await supabase.rpc("get_supabase_version");
-
-      if (error) {
-        // Try a different approach - check if any tables exist
-        const { data: tables, error: tablesError } = await supabase
-          .from("information_schema.tables")
-          .select("table_name")
-          .eq("table_schema", "public")
-          .limit(5);
-
-        if (tablesError) {
-          return {
-            connected: false,
-            message: "Connection established but couldn't access any tables",
-            error: tablesError,
-          };
-        }
-
-        return {
-          connected: true,
-          message: "Connection successful",
-          tables: tables || [],
-          url: supabase.supabaseUrl,
-        };
-      }
-
+    // Check if Supabase URL is properly configured
+    if (supabase.supabaseUrl === "https://example.supabase.co") {
       return {
-        connected: true,
-        message: "Connection successful",
-        version: data,
+        connected: false,
+        message: "Supabase URL not configured",
         url: supabase.supabaseUrl,
       };
     }
 
-    if (connectionError) {
+    // Try to get the current user to test auth connection
+    const { data: authData, error: authError } =
+      await supabase.auth.getSession();
+
+    // Try to get public tables
+    const { data: tables, error: tablesError } = await supabase
+      .from("information_schema.tables")
+      .select("table_name")
+      .eq("table_schema", "public")
+      .limit(5);
+
+    // If we can't access tables, try a simpler query
+    if (tablesError) {
+      // Try a simple health check
+      const { data: healthData, error: healthError } = await supabase
+        .from("profiles")
+        .select("count")
+        .limit(1);
+
+      if (healthError && healthError.code !== "PGRST116") {
+        // If we get an error that's not just "no rows returned"
+        return {
+          connected: false,
+          message: "Connection established but couldn't access any tables",
+          error: healthError,
+          url: supabase.supabaseUrl,
+          auth: authError ? "Error" : "OK",
+        };
+      }
+
+      // If we got here, we have some kind of connection
       return {
-        connected: false,
-        message: "Failed to connect to Supabase",
-        error: connectionError,
+        connected: true,
+        message: "Basic connection successful, but limited table access",
+        url: supabase.supabaseUrl,
+        auth: authError ? "Error" : "OK",
       };
     }
 
+    // Success case - we got tables
     return {
       connected: true,
       message: "Connection successful",
-      data: connectionTest,
+      tables: tables || [],
       url: supabase.supabaseUrl,
+      auth: authError ? "Error" : "OK",
     };
   } catch (error) {
+    console.error("Supabase connection test error:", error);
     return {
       connected: false,
       message: "Exception occurred while testing connection",
       error,
+      url: supabase.supabaseUrl,
     };
   }
 };
